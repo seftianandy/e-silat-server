@@ -1,10 +1,10 @@
 $(document).ready(function () {
 	getData();
 
-	var table = $('#data_user').DataTable( {
-        responsive: true
-    } ); 
-    new $.fn.dataTable.FixedHeader( table );
+	// var table = $('#data_user').DataTable( {
+    //     responsive: true
+    // } ); 
+    // new $.fn.dataTable.FixedHeader( table );
 	// $("#data_user").DataTable();
 
 	$("#tambah_user").on("submit", function (e) {

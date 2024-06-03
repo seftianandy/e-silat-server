@@ -21,6 +21,13 @@ class PesertaModel extends CI_Model {
         return $data->result();
     }
 
+	public function updateData($tabel, $data, $where)
+	{
+		$data = $this->db->update($tabel, $data, $where);
+		return $data;
+	}
+
+
     public function truncate($tabel){
         $data = $this->db->query('TRUNCATE TABLE '.$tabel);
         return $data;

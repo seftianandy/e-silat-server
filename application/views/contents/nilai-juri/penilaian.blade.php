@@ -3,20 +3,34 @@
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content" style="background-color: #fff;">
-        <div class="modal modal-primary fade" id="modal-biru" status="close">
+        <div class="modal modal-warning fade" id="modal-ronde">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header text-center">
-                        <h4 class="modal-title">Vote Sudut Biru</h4>
+                        <h4 class="modal-title">Ronde akan berganti dalam waktu</h4>
+                        <h2 class="modal-title" id="title_ronde">5</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal modal-default fade" data-backdrop="static" id="modal-biru" status="close">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title">VOTE</h4>
                         <h2 class="modal-title" id="title_biru"></h2>
                         <div class="row" style="margin-top: 2rem;">
-                            <div class="col-sm-6">
-                                <button class="btn btn-lg btn-block bg-orange"
-                                id="vote_nb" voteId="" dataM="">NO</button>
+                            <div class="col-sm-4">
+                                <button class="btn btn-lg btn-block bg-red"
+                                id="vote_nb" voteId="" dataM="">MERAH</button>
                             </div>
-                            <div class="col-sm-6">
-                                <button class="btn btn-lg btn-block bg-olive"
-                                id="vote_yb" voteId="" dataM="">YES</button>
+                            <div class="col-sm-4">
+                                <button class="btn btn-lg btn-block bg-blue"
+                                id="vote_yb" voteId="" dataM="">BIRU</button>
+                            </div>
+                            <div class="col-sm-4">
+                                <button class="btn btn-lg btn-block btn-warning"
+                                id="vote_kosong" voteId="" dataM="">NETRAL</button>
                             </div>
                         </div>
                     </div>
@@ -120,11 +134,11 @@
                                 Tendangan(2)
                             </button>
                         </div>
-                        <button class="button btn btn-flat btn-warning btn-lg"
+                        <!-- <button class="button btn btn-flat btn-warning btn-lg"
                         id="hapus_m" atlitId=""
                         style="margin-top: 6.2rem;">
                             Hapus
-                        </button>
+                        </button> -->
                     </div>
                     <div class="col-sm-2 text-center">
                         <button class="button btn btn-flat btn-success btn-lg"
@@ -133,11 +147,11 @@
                         </button>
                     </div>
                     <div class="col-sm-5 text-right">
-                        <button class="button btn btn-flat btn-warning btn-lg d-block d-sm-none"
+                        <!-- <button class="button btn btn-flat btn-warning btn-lg d-block d-sm-none"
                         id="hapus_b" atlitId=""
                         style="margin-top: 6.2rem;">
                             Hapus
-                        </button>
+                        </button> -->
                         <div class="btn-group-vertical" style="margin-left: 1.5rem;">
                             <button class="button btn btn-flat btn-primary btn-lg"
                             id="pukulan_b" atlitId="" tombol="puk_jb{{$kode}}">

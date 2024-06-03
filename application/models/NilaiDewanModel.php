@@ -14,8 +14,10 @@ class NilaiDewanModel extends CI_Model {
                                     atlit_biru.kontingen AS kontingen_biru,
                                     atlit_merah.kontingen AS kontingen_merah,
                                     atlit_merah.nama AS nama_atlit_merah,
+                                    status_pertandingan,
                                     arena.arena,
-                                    ronde.status_ronde
+                                    ronde.status_ronde 
+
                                 FROM
                                     partai
                                     JOIN atlit AS atlit_biru ON partai.tim_biru_id = atlit_biru.id
@@ -29,6 +31,13 @@ class NilaiDewanModel extends CI_Model {
                                     partai.id
         ');
         return $data->result();
+    }
+
+    public function getDataPertandinganSelesai($id) {
+        $this->db->where('id', $id);
+        $this->db->update('partai', array('status_pertandingan' => '1'));
+
+         return $this->db->affected_rows() > 0;
     }
 
     public function getRonde($partai_id){
@@ -174,24 +183,42 @@ class NilaiDewanModel extends CI_Model {
         return $data->result();
     }
 
-    public function deleteData($users_id, $atlit_id){
-        $data = $this->db->query('DELETE 
-                                    FROM
-                                        penilaian
-                                    WHERE
-                                        users_id = "'.$users_id.'"
-                                        AND atlit_id = "'.$atlit_id.'"
-                                        AND id =(
-                                        SELECT
-                                            id
-                                        FROM
-                                            penilaian
-                                        WHERE
-                                            users_id = "'.$users_id.'"
-                                            AND atlit_id = "'.$atlit_id.'"
-                                        ORDER BY
-                                        id DESC
-                                        LIMIT 1)
+    // public function deleteData($users_id, $atlit_id){
+    //     $data = $this->db->query('DELETE 
+    //                                 FROM
+    //                                     penilaian
+    //                                 WHERE
+    //                                     users_id = "'.$users_id.'"
+    //                                     AND atlit_id = "'.$atlit_id.'"
+    //                                     AND id =(
+    //                                     SELECT
+    //                                         id
+    //                                     FROM
+    //                                         penilaian
+    //                                     WHERE
+    //                                         users_id = "'.$users_id.'"
+    //                                         AND atlit_id = "'.$atlit_id.'"
+    //                                     ORDER BY
+    //                                     id DESC
+    //                                     LIMIT 1)
+    //     ');
+    //     return $data;
+    // }
+
+     public function deleteData($users_id, $atlit_id){
+        $data = $this->db->query('DELETE p1
+                                FROM penilaian p1
+                                JOIN (
+                                    SELECT id
+                                    FROM penilaian
+                                    WHERE users_id = "'.$users_id.'"
+                                    AND atlit_id = "'.$atlit_id.'"
+                                    ORDER BY id DESC
+                                    LIMIT 1
+                                ) p2 ON p1.id = p2.id
+                                WHERE p1.users_id = "'.$users_id.'"
+                                AND p1.atlit_id = "'.$atlit_id.'";
+
         ');
         return $data;
     }

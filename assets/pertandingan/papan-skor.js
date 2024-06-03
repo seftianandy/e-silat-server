@@ -1,13 +1,15 @@
 $(document).ready(function () {
     getData();
+    getDataKop();
     var base_url = window.location.origin;
     setInterval(function () {
         getDataVote();
+        getDataRondecon()
     }, 1000);
 
     function resetBinButtons() {
-        $("#bin_m1").removeClass("bg-red bg-green");
-        $("#bin_m2").removeClass("bg-red bg-green");
+        $("#bin_m1").removeClass("bg-red bg-blue");
+        $("#bin_m2").removeClass("bg-red bg-blue");
     }
 
     $(document).on("click", "#ronde_btn", function () {
@@ -46,6 +48,19 @@ $(document).ready(function () {
                     $("#nama_atlit_merah").text(data[i].nama_atlit_merah);
                     $("#kontingen_biru").text(data[i].kontingen_biru);
                     $("#nama_atlit_biru").text(data[i].nama_atlit_biru);
+					$("#logoBiru").text(data[i].kontingen_biru);
+					
+					if (data[i].logo_merah !== null && data[i].logo_merah !== '') {
+						$("#logoMerah").attr('src', 'data:image/jpeg;base64,' + data[i].logo_merah);
+					} else {
+						$("#logoMerah").hide();
+					}
+
+					if (data[i].logo_biru !== null && data[i].logo_biru !== '') {
+						$("#logoBiru").attr('src', 'data:image/jpeg;base64,' + data[i].logo_biru);
+					} else {
+						$("#logoBiru").hide();
+					}
 
                     getRonde(id, rondeId);
                     
@@ -67,6 +82,34 @@ $(document).ready(function () {
                         getTombolJuri();
                     }, 1000);
                     
+                }
+            },
+        });
+    }
+
+    function getDataKop() {
+        $.ajax({
+            type: "GET",
+            url: "datakop",
+            async: false,
+            dataType: "json",
+            success: function (data) {
+                var i;
+                for (i = 0; i < data.length; i++) {
+                    $("#kop").html(data[i].kop);
+
+                    if (data[i].logokiri !== null && data[i].logokiri !== '') {
+                        $("#logokiri").attr('src', 'data:image/jpeg;base64,' + data[i].logokiri);
+                    } else {
+                        $("#logokiri").attr('src', 'dist/img/noimage.png');
+                    }
+
+                    if (data[i].logokanan !== null && data[i].logokanan !== '') {
+                        $("#logokanan").attr('src', 'data:image/jpeg;base64,' + data[i].logokanan);
+                    } else {
+                        $("#logokanan").attr('src', 'dist/img/noimage.png');
+                    }
+
                 }
             },
         });
@@ -403,9 +446,9 @@ $(document).ready(function () {
                     var tombolStatus = data[i].status;
 
                     if (tombolStatus === 'on') {
-                        $("#" + tombolId).addClass("bg-olive"); // Menambahkan kelas untuk warna
+                        $("#" + tombolId).addClass("bg-blue"); // Menambahkan kelas untuk warna
                     } else {
-                        $("#" + tombolId).removeClass("bg-olive"); // Menghapus kelas untuk warna
+                        $("#" + tombolId).removeClass("bg-blue"); // Menghapus kelas untuk warna
                     }
                 }
             },
@@ -469,26 +512,32 @@ $(document).ready(function () {
                         "<tr>" +
                         "<th class='text-center ";
                     if (data[i].juri_1 == 'y') {
-                        html += "bg-green";
+                        html += "bg-blue";
                     } else if (data[i].juri_1 == 'n') {
                         html += "bg-red";
-                    }
+					} else if (data[i].juri_1 == 'kosong') {
+						html += "bg-orange";
+					}
                     html +=
                         "' style='padding: 2rem; vertical-align: middle;'>Juri 1</th>" +
                         "<th class='text-center ";
                     if (data[i].juri_2 == 'y') {
-                        html += "bg-green";
+                        html += "bg-blue";
                     } else if (data[i].juri_2 == 'n') {
                         html += "bg-red";
-                    }
+					} else if (data[i].juri_2 == 'kosong') {
+						html += "bg-orange";
+					}
                     html +=
                         "' style='padding: 2rem; vertical-align: middle;'>Juri 2</th>" +
                         "<th class='text-center ";
                     if (data[i].juri_3 == 'y') {
-                        html += "bg-green";
+                        html += "bg-blue";
                     } else if (data[i].juri_3 == 'n') {
                         html += "bg-red";
-                    }
+					} else if (data[i].juri_3 == 'kosong') {
+						html += "bg-orange";
+					}
                     html +=
                         "' style='padding: 2rem; vertical-align: middle;'>Juri 3</th>" +
                         "</tr>";
@@ -504,6 +553,61 @@ $(document).ready(function () {
                     $("#getDataVoteB").html(html);
                 }
                 
+            },
+        });
+    }
+
+    function getDataRondecon() {
+        $.ajax({
+            type: "GET",
+            url: "datarondeconjuri",
+            async: false,
+            dataType: "json",
+            success: function (data) {
+                var html = "";
+                var i;
+                for (i = 0; i < data.length; i++) {
+                    if (data[i].id != null) {
+                        $("#title_ronde").text();
+
+                        $("#modal-ronde").modal("show");
+
+                        var rondeId = data[i].ronde_id;
+                        var partaiId = data[i].partai_id;
+                        var id = data[i].id;
+
+                        var waktu = 5;
+                        setInterval(function () {
+                            waktu--;
+                            if (waktu < 0) {
+                                $("#modal-ronde").modal("hide");
+                                updateRondecon(id, rondeId, 'y');
+
+                                let newUrl = window.location.href.split('?')[0] + '?id=' + partaiId + '&ronde-id=' + rondeId;
+                                window.history.pushState({ path: newUrl }, '', newUrl);
+                                location.reload();
+
+                            } else {
+                                document.getElementById("title_ronde").innerHTML = waktu;
+                            }
+                        }, 1000);
+                    }
+                }
+            },
+        });
+    }
+
+    function updateRondecon(id, rondeId, val) {
+        $.ajax({
+            type: "POST",
+            url: "updaterondeconjuri",
+            data: {
+                id: id,
+                rondeId: rondeId,
+                val: val
+            },
+            success: function () {
+                console.log("berhasil pindah ronde");
             },
         });
     }

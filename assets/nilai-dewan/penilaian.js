@@ -2,7 +2,7 @@ $(document).ready(function () {
 	getData();
 	// console.log(id);
 	// console.log(rondeId);
-	
+
 
 	$(document).on("click", "#jatuhan_m", function () {
 		let newQueryString = new URLSearchParams(window.location.search);
@@ -152,12 +152,23 @@ $(document).ready(function () {
 
 	$(document).on("click", "#ronde_btn", function () {
 		let rondeId = $(this).attr("ronde-id");
+		let partaiId = $(this).attr("partai-id");
 		// console.log(rondeId)
 
-		let newUrl = window.location.href.split('?')[0] + '?id=1&ronde-id=' + rondeId;
-		window.history.pushState({ path: newUrl }, '', newUrl);
+		$.ajax({
+			type: "POST",
+			url: "tambahrondecondewan",
+			data: {
+				ronde_id: rondeId,
+				partai_id: partaiId
+			},
+			success: function () {
+				let newUrl = window.location.href.split('?')[0] + '?id=' + partaiId + '&ronde-id=' + rondeId;
+				window.history.pushState({ path: newUrl }, '', newUrl);
 
-		getData();
+				getData();
+			},
+		});
 	});
 
 	function getData() {
@@ -171,8 +182,8 @@ $(document).ready(function () {
 			type: "POST",
 			url: "datanilaidewan",
 			data: {
-				partai_id : id,
-				ronde_id : rondeId
+				partai_id: id,
+				ronde_id: rondeId
 			},
 			async: false,
 			dataType: "json",
@@ -186,24 +197,47 @@ $(document).ready(function () {
 					$("#kontingen_biru").text(data[i].kontingen_biru);
 					$("#nama_atlit_biru").text(data[i].nama_atlit_biru);
 
-					$("#jatuhan_m").attr("atlitId", data[i].tim_merah_id);
-					$("#binaan_m").attr("atlitId", data[i].tim_merah_id);
-					$("#teguran_m").attr("atlitId", data[i].tim_merah_id);
-					$("#teguran2_m").attr("atlitId", data[i].tim_merah_id);
-					$("#peringatan_m").attr("atlitId", data[i].tim_merah_id);
-					$("#hapus_m").attr("atlitId", data[i].tim_merah_id);
+					if (data[i].status_pertandingan === '1') {
+						$("#jatuhan_m").attr("atlitId", data[i].tim_merah_id).hide();
+						$("#binaan_m").attr("atlitId", data[i].tim_merah_id).hide();
+						$("#teguran_m").attr("atlitId", data[i].tim_merah_id).hide();
+						$("#teguran2_m").attr("atlitId", data[i].tim_merah_id).hide();
+						$("#peringatan_m").attr("atlitId", data[i].tim_merah_id).hide();
+						$("#hapus_m").attr("atlitId", data[i].tim_merah_id).hide();
 
-					$("#jatuhan_b").attr("atlitId", data[i].tim_biru_id);
-					$("#binaan_b").attr("atlitId", data[i].tim_biru_id);
-					$("#teguran_b").attr("atlitId", data[i].tim_biru_id);
-					$("#teguran2_b").attr("atlitId", data[i].tim_biru_id);
-					$("#peringatan_b").attr("atlitId", data[i].tim_biru_id);
-					$("#hapus_b").attr("atlitId", data[i].tim_biru_id);
+						$("#jatuhan_b").attr("atlitId", data[i].tim_biru_id).hide();
+						$("#binaan_b").attr("atlitId", data[i].tim_biru_id).hide();
+						$("#teguran_b").attr("atlitId", data[i].tim_biru_id).hide();
+						$("#teguran2_b").attr("atlitId", data[i].tim_biru_id).hide();
+						$("#peringatan_b").attr("atlitId", data[i].tim_biru_id).hide();
+						$("#hapus_b").attr("atlitId", data[i].tim_biru_id).hide();
 
-					$("#vote_jm").attr("atlitId", data[i].tim_merah_id);
-					$("#vote_jb").attr("atlitId", data[i].tim_biru_id);
-					$("#vote_bm").attr("atlitId", data[i].tim_merah_id);
-					$("#vote_bb").attr("atlitId", data[i].tim_biru_id);
+						$("#vote_jm").attr("atlitId", data[i].tim_merah_id).hide();
+						$("#vote_jb").attr("atlitId", data[i].tim_biru_id).hide();
+						$("#vote_bm").attr("atlitId", data[i].tim_merah_id).hide();
+						$("#vote_bb").attr("atlitId", data[i].tim_biru_id).hide();
+
+						$("#voteBtn").hide();
+					} else {
+						$("#jatuhan_m").attr("atlitId", data[i].tim_merah_id);
+						$("#binaan_m").attr("atlitId", data[i].tim_merah_id);
+						$("#teguran_m").attr("atlitId", data[i].tim_merah_id);
+						$("#teguran2_m").attr("atlitId", data[i].tim_merah_id);
+						$("#peringatan_m").attr("atlitId", data[i].tim_merah_id);
+						$("#hapus_m").attr("atlitId", data[i].tim_merah_id);
+
+						$("#jatuhan_b").attr("atlitId", data[i].tim_biru_id);
+						$("#binaan_b").attr("atlitId", data[i].tim_biru_id);
+						$("#teguran_b").attr("atlitId", data[i].tim_biru_id);
+						$("#teguran2_b").attr("atlitId", data[i].tim_biru_id);
+						$("#peringatan_b").attr("atlitId", data[i].tim_biru_id);
+						$("#hapus_b").attr("atlitId", data[i].tim_biru_id);
+
+						$("#vote_jm").attr("atlitId", data[i].tim_merah_id);
+						$("#vote_jb").attr("atlitId", data[i].tim_biru_id);
+						$("#vote_bm").attr("atlitId", data[i].tim_merah_id);
+						$("#vote_bb").attr("atlitId", data[i].tim_biru_id);
+					}
 
 					getRonde(id, rondeId, data[i].tim_merah_id, data[i].tim_biru_id);
 
@@ -234,7 +268,7 @@ $(document).ready(function () {
 				let i;
 				for (i = 0; i < data.length; i++) {
 					html +=
-						"<tr ronde-id='"+
+						"<tr ronde-id='" +
 						data[i].ronde_id +
 						"'>" +
 						"<td class='text-danger bg-warning text-center'>" +
@@ -245,31 +279,33 @@ $(document).ready(function () {
 						"=''></span>" +
 						"</td>" +
 						"<td class='text-danger text-center'>" +
-						"<span id='teguran_merah_"+
+						"<span id='teguran_merah_" +
 						i +
 						"'></span>" +
 						"</td>" +
 						"<td class='text-danger text-center'>" +
-						"<span id='binaan_merah_"+
+						"<span id='binaan_merah_" +
 						i +
 						"'></span>" +
 						"</td>" +
 						"<td class='text-danger text-center'>" +
-						"<span id='hukuman_merah_"+
+						"<span id='hukuman_merah_" +
 						i +
 						"'></span>" +
 						"</td>" +
 						"<td class='text-danger'>" +
-						"<span id='jatuhan_merah_"+
+						"<span id='jatuhan_merah_" +
 						i +
 						"'></span>" +
 						"</td>" +
 						"<td class='text-center ";
-					if (ronde_id == data[i].ronde_id){
-						html +=	"bg-navy";
+					if (ronde_id == data[i].ronde_id) {
+						html += "bg-navy";
 					}
-					html +=	
-						"' id='ronde_btn' ronde-id='" +
+					html +=
+						"' id='ronde_btn' partai-id='" +
+						partai_id +
+						"' ronde-id='" +
 						data[i].ronde_id +
 						"' style='cursor: pointer;'>" +
 						"<strong>" +
@@ -279,27 +315,27 @@ $(document).ready(function () {
 						"</strong>" +
 						"</td>" +
 						"<td class='text-danger text-right'>" +
-						"<span id='jatuhan_biru_"+
+						"<span id='jatuhan_biru_" +
 						i +
 						"'></span>" +
 						"</td>" +
 						"<td class='text-danger text-center'>" +
-						"<span id='hukuman_biru_"+
+						"<span id='hukuman_biru_" +
 						i +
 						"'></span>" +
 						"</td>" +
 						"<td class='text-danger text-center'>" +
-						"<span id='binaan_biru_"+
+						"<span id='binaan_biru_" +
 						i +
 						"'></span>" +
 						"</td>" +
 						"<td class='text-danger text-center'>" +
-						"<span id='teguran_biru_"+
+						"<span id='teguran_biru_" +
 						i +
 						"'></span>" +
 						"</td>" +
 						"<td class='text-danger bg-warning text-center'>" +
-						"<span id='peringatan_biru_"+
+						"<span id='peringatan_biru_" +
 						i +
 						"' peringatan-merah-" +
 						i +
@@ -307,7 +343,7 @@ $(document).ready(function () {
 						"</td>" +
 						"</tr>";
 
-					
+
 					getPeringatanMerah(i, data[i].ronde_id, tim_merah_id);
 					getTeguranMerah(i, data[i].ronde_id, tim_merah_id);
 					getBinaanMerah(i, data[i].ronde_id, tim_merah_id);
@@ -333,7 +369,7 @@ $(document).ready(function () {
 			data: {
 				ronde_id: ronde_id,
 				atlit_id: atlit_id,
-				nilai_id:  4
+				nilai_id: 4
 			},
 			dataType: "json",
 			success: function (data) {
@@ -347,7 +383,7 @@ $(document).ready(function () {
 					} else if (nilai_i == 2) {
 						nilaiPeringatan = nilai + 5;
 						// console.log("nilai 2 = " + nilaiPeringatan)
-					}else if (nilai_i == 3) {
+					} else if (nilai_i == 3) {
 						nilaiPeringatan = nilai + 15;
 						$("#peringatan_m").prop("disabled", true);
 						// console.log("nilai 3 = " + nilaiPeringatan)
@@ -358,7 +394,7 @@ $(document).ready(function () {
 					if (index == 0) {
 						$("#per_m1").val(nilaiPeringatan);
 						$("#peringatan_merah_" + index).text("-" + nilaiPeringatan);
-					} 
+					}
 					if (index == 1) {
 						nilaiM2 = $("#per_m1").val();
 						nilaiM2_i = parseInt(nilaiM2);
@@ -384,9 +420,9 @@ $(document).ready(function () {
 
 							$("#peringatan_merah_" + index).text("-" + nilaiM2_oke);
 						}
-						
+
 						// console.log("ronde 2 = " + nilaiM2);
-					} 
+					}
 					if (index == 2) {
 						nilaiM1 = $("#per_m1").val();
 						nilaiM2 = $("#per_m2").val();
@@ -883,7 +919,7 @@ $(document).ready(function () {
 			success: function () {
 				// updateTombol(tombol);
 				// getData();
-				$("#"+modal).modal("hide");
+				$("#" + modal).modal("hide");
 				let intervalId = setInterval(function () {
 					getDataVote();
 				}, 1000);
@@ -894,7 +930,7 @@ $(document).ready(function () {
 				// 	hasilVote(atlitId, rondeId);
 				// 	getData();
 				// }, 5000);
-				$("#closeVote").on("click", function(){
+				$("#closeVote").on("click", function () {
 					closeVote(intervalId, atlitId, rondeId);
 				});
 			},
@@ -921,27 +957,33 @@ $(document).ready(function () {
 					html +=
 						"<tr>" +
 						"<th class='text-center ";
-						if (data[i].juri_1 == 'y'){
-							html += "bg-green";
-						} else if (data[i].juri_1 == 'n'){
-							html += "bg-red";
-						}
+					if (data[i].juri_1 == 'y') {
+						html += "bg-blue";
+					} else if (data[i].juri_1 == 'n') {
+						html += "bg-red";
+					} else if (data[i].juri_1 == 'kosong') {
+						html += "bg-orange";
+					}
 					html +=
 						"' style='padding: 2rem; vertical-align: middle;'>Juri 1</th>" +
 						"<th class='text-center ";
-						if (data[i].juri_2 == 'y') {
-							html += "bg-green";
-						} else if (data[i].juri_2 == 'n') {
-							html += "bg-red";
-						}
+					if (data[i].juri_2 == 'y') {
+						html += "bg-blue";
+					} else if (data[i].juri_2 == 'n') {
+						html += "bg-red";
+					} else if (data[i].juri_2 == 'kosong') {
+						html += "bg-orange";
+					}
 					html +=
 						"' style='padding: 2rem; vertical-align: middle;'>Juri 2</th>" +
 						"<th class='text-center ";
-						if (data[i].juri_3 == 'y') {
-							html += "bg-green";
-						} else if (data[i].juri_3 == 'n') {
-							html += "bg-red";
-						}
+					if (data[i].juri_3 == 'y') {
+						html += "bg-blue";
+					} else if (data[i].juri_3 == 'n') {
+						html += "bg-red";
+					} else if (data[i].juri_3 == 'kosong') {
+						html += "bg-orange";
+					}
 					html +=
 						"' style='padding: 2rem; vertical-align: middle;'>Juri 3</th>" +
 						"</tr>";
@@ -969,6 +1011,8 @@ $(document).ready(function () {
 
 
 	function hapusNilai(atlitId) {
+
+		console.log(atlitId);
 		Swal.fire({
 			title: "Yakin hapus nilai ?",
 			text: "nilai terakhir yang masuk akan dihapus",
@@ -1022,7 +1066,7 @@ $(document).ready(function () {
 							console.log(tombol + ' off');
 						},
 					});
-				}, 2000); 
+				}, 2000);
 			},
 		});
 	}

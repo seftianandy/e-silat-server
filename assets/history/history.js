@@ -1,10 +1,10 @@
 $(document).ready(function () {
 	getData();
 
-	let table = $('#data').DataTable({
-		responsive: true
-	});
-	new $.fn.dataTable.FixedHeader(table);
+	// let table = $('#data').DataTable({
+	// 	responsive: true
+	// });
+	// new $.fn.dataTable.FixedHeader(table);
 
 	function getData() {
 		$.ajax({

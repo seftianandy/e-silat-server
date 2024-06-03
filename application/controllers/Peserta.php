@@ -107,7 +107,7 @@ class Peserta extends CI_Controller {
 					'partai' => $rowData[2],
 					'tim_merah_id' => $timMerahId,
                 	'tim_biru_id' => $timBiruId,
-					'pertandingan' => 'sabung',
+					'pertandingan' => 'tanding',
 					'tgl_pelaksanaan' => date('Y-m-d')
 				);
 
@@ -140,9 +140,22 @@ class Peserta extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function updateLogo()
+	{
+		$id = $this->input->post('id');
+		$logo = base64_encode(file_get_contents($_FILES['file']['tmp_name']));
+		$data = array(
+			'logo' => $logo
+		);
+
+		$data = $this->PesertaModel->updateData('atlit', $data, 'id =' . $id);
+		echo json_encode($data);
+	}
+
 	public function resetData(){
 		$this->PesertaModel->truncate('atlit');
 		$this->PesertaModel->truncate('ronde');
+		$this->PesertaModel->truncate('rondecon');
 		$this->PesertaModel->truncate('partai');
 		$this->PesertaModel->truncate('penilaian');
 		$this->PesertaModel->truncate('vote');

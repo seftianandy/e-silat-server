@@ -1,10 +1,10 @@
 $(document).ready(function () {
 	getData();
 
-	let table = $('#data').DataTable({
-		responsive: true
-	});
-	new $.fn.dataTable.FixedHeader(table);
+	// let table = $('#data').DataTable({
+	// 	responsive: true
+	// });
+	// new $.fn.dataTable.FixedHeader(table);
 
 	function getData() {
 		$.ajax({
@@ -44,7 +44,8 @@ $(document).ready(function () {
 						"<td class='text-center' style='vertical-align: middle;'>" +
 						"<a href='papanskor?id=" +
 						data[i].id +
-						"&ronde-id=1' target='_blank' class='btn btn-sm btn-warning'><i class='fa fa-desktop'></i></a>" +
+						"&ronde-id=" + data[i].ronde_id +
+						"' target='_blank' class='btn btn-sm btn-warning'><i class='fa fa-desktop'></i></a>" +
 						"</td>" +
 						"</tr>";
 				}

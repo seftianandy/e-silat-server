@@ -2,6 +2,7 @@ $(document).ready(function () {
 	getData();
 	setInterval(function () {
 		getDataVote();
+		getDataRondecon()
 	}, 1000);
 	// console.log(id);
 	// console.log(rondeId);
@@ -113,11 +114,19 @@ $(document).ready(function () {
 		updateVote(voteId, val, dataM);
 	});
 
+	$(document).on("click", "#vote_kosong", function () {
+		let voteId = $(this).attr("voteId");
+		let dataM = $(this).attr("dataM");
+		let val = 'kosong';
+		updateVote(voteId, val, dataM);
+	});
+
 	$(document).on("click", "#ronde_btn", function () {
 		let rondeId = $(this).attr("ronde-id");
+		let partaiId = $(this).attr("partai-id");
 		// console.log(rondeId)
 
-		let newUrl = window.location.href.split('?')[0] + '?id=1&ronde-id=' + rondeId;
+		let newUrl = window.location.href.split('?')[0] + '?id=' + partaiId + '&ronde-id=' + rondeId;
 		window.history.pushState({ path: newUrl }, '', newUrl);
 
 		getData();
@@ -153,13 +162,25 @@ $(document).ready(function () {
 					$("#kontingen_biru").text(data[i].kontingen_biru);
 					$("#nama_atlit_biru").text(data[i].nama_atlit_biru);
 
-					$("#pukulan_m").attr("atlitId", data[i].tim_merah_id);
-					$("#tendangan_m").attr("atlitId", data[i].tim_merah_id);
-					$("#hapus_m").attr("atlitId", data[i].tim_merah_id);
+					if (data[i].status_pertandingan === '1') {
+						$("#pukulan_m").attr("atlitId", data[i].tim_merah_id).hide();
+						$("#tendangan_m").attr("atlitId", data[i].tim_merah_id).hide();
+						$("#hapus_m").attr("atlitId", data[i].tim_merah_id).hide();
 
-					$("#pukulan_b").attr("atlitId", data[i].tim_biru_id);
-					$("#tendangan_b").attr("atlitId", data[i].tim_biru_id);
-					$("#hapus_b").attr("atlitId", data[i].tim_biru_id);
+						$("#pukulan_b").attr("atlitId", data[i].tim_biru_id).hide();
+						$("#tendangan_b").attr("atlitId", data[i].tim_biru_id).hide();
+						$("#hapus_b").attr("atlitId", data[i].tim_biru_id).hide();
+
+						$("#refresh").hide();
+					} else {
+						$("#pukulan_m").attr("atlitId", data[i].tim_merah_id);
+						$("#tendangan_m").attr("atlitId", data[i].tim_merah_id);
+						$("#hapus_m").attr("atlitId", data[i].tim_merah_id);
+
+						$("#pukulan_b").attr("atlitId", data[i].tim_biru_id);
+						$("#tendangan_b").attr("atlitId", data[i].tim_biru_id);
+						$("#hapus_b").attr("atlitId", data[i].tim_biru_id);
+					}
 
 					var tim_merah_id = data[i].tim_merah_id;
 					var tim_biru_id = data[i].tim_biru_id;
@@ -205,7 +226,9 @@ $(document).ready(function () {
 						html +=	"bg-navy";
 					}
 					html +=	
-						"' id='ronde_btn' ronde-id='" +
+						"' id='ronde_btn' partai-id='" +
+						partai_id +
+						"' ronde-id='" +
 						data[i].ronde_id +
 						"' style='cursor: pointer;'>" +
 						"<strong>" +
@@ -286,6 +309,61 @@ $(document).ready(function () {
 		});
 	}
 
+	function getDataRondecon() {
+		$.ajax({
+			type: "GET",
+			url: "datarondeconjuri",
+			async: false,
+			dataType: "json",
+			success: function (data) {
+				var html = "";
+				var i;
+				for (i = 0; i < data.length; i++) {
+					if (data[i].id != null) {
+						$("#title_ronde").text();
+
+						$("#modal-ronde").modal("show");
+
+						var rondeId = data[i].ronde_id;
+						var partaiId = data[i].partai_id;
+						var id = data[i].id;
+
+						var waktu = 5;
+						setInterval(function () {
+							waktu--;
+							if (waktu < 0) {
+								$("#modal-ronde").modal("hide");
+								updateRondecon(id, rondeId, 'y');
+
+								let newUrl = window.location.href.split('?')[0] + '?id=' + partaiId + '&ronde-id=' + rondeId;
+								window.history.pushState({ path: newUrl }, '', newUrl);
+								location.reload();
+
+							} else {
+								document.getElementById("title_ronde").innerHTML = waktu;
+							}
+						}, 1000);
+					}
+				}
+			},
+		});
+	}
+
+	function updateRondecon(id, rondeId, val) {
+		$.ajax({
+			type: "POST",
+			url: "updaterondeconjuri",
+			data: {
+				id: id,
+				rondeId : rondeId,
+				val: val
+			},
+			success: function () {
+				console.log("berhasil pindah ronde");
+			},
+		});
+	}
+
 	function getDataVote() {
 		$.ajax({
 			type: "GET",
@@ -312,12 +390,15 @@ $(document).ready(function () {
 						$("#vote_ym").attr("voteId", data[i].id);
 						$("#vote_nb").attr("voteId", data[i].id);
 						$("#vote_nm").attr("voteId", data[i].id);
+						$("#vote_kosong").attr("voteId", data[i].id);
 
 						$("#vote_yb").attr("dataM", data[i].sudut);
 						$("#vote_ym").attr("dataM", data[i].sudut);
 						$("#vote_nb").attr("dataM", data[i].sudut);
 						$("#vote_nm").attr("dataM", data[i].sudut);
+						$("#vote_kosong").attr("dataM", data[i].sudut);
 
+						
 						$("#" + data[i].sudut).modal("show");
 
 						var sudut = data[i].sudut;
@@ -327,7 +408,7 @@ $(document).ready(function () {
 							setTimeout(function () {
 								$("#" + sudut).modal("hide");
 								updateVote(id, 'n', sudut);
-							}, 5000); 
+							}, 50000); 
 						}
 					}
 				}

@@ -20,16 +20,12 @@
               </div>
             </div>
             <div class="box-body">
-              <table class="table table-bordered table-condensed table-responsive table-hover" id="data">
+              <table class="table table-bordered table-condensed table-responsive" id="data">
                 <thead>
                   <tr>
                     <th width="50" class="text-center">No</th>
-                    <th>Nama</th>
-                    <th>Kontingen</th>
-                    <th>Kelas</th>
-                    <th>Kategori</th>
-                    <th>Jenis Kelamin</th>
-                    <th class="text-center">Sudut</th>
+                    <th>Data Peserta</th>
+                    {{-- <th width="350">Logo Tim / Foto</th> --}}
                   </tr>
                 </thead>
                 <tbody id="getData">
@@ -73,6 +69,8 @@
               <label class="col-sm-2 col-form-label"></label>
               <div class="col-sm-10">
                 <span class="text-danger">*</span> Untuk format excel bisa di download melalui tombol dibawah ini.
+                <br>
+                <span class="text-danger">* Harap klik tombol simpan satu kali saja agar data tidak terduplikat!</span> 
                 <p></p>
                 <a href="{{base_url()}}dist/file/contoh upload pesertas.xls" class="btn btn-sm btn-success"><i class="fa fa-download"></i> Download format excel</a>
               </div>
@@ -96,17 +94,17 @@
 @section('css')
 <!-- DataTables -->
 <link rel="stylesheet" href="<?= base_url() ?>bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.9/css/fixedHeader.bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css">
+{{-- <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.9/css/fixedHeader.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css"> --}}
 @endsection
 
 @section('js')
   <!-- DataTables -->
   <script src="<?= base_url() ?>bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
   <script src="<?= base_url() ?>bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-  <script src="https://cdn.datatables.net/fixedheader/3.1.9/js/dataTables.fixedHeader.min.js"></script>
+  {{-- <script src="https://cdn.datatables.net/fixedheader/3.1.9/js/dataTables.fixedHeader.min.js"></script>
   <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-  <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap.min.js"></script> --}}
   <script src="<?= base_url() ?>assets/peserta/peserta.js"></script>
 @endsection
 

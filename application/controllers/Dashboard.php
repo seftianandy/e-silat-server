@@ -8,10 +8,51 @@ class Dashboard extends CI_Controller {
 			
             redirect('login');
         }
+        $this->load->model('PesertaModel');
+        $this->load->model('KopModel');
 	}
 	
 	public function index()
 	{
 		view('contents.dashboard.index');
+    }
+
+    public function tampilData(){
+		$data = $this->KopModel->getData('kop');
+		echo json_encode($data);
+	}
+
+    public function updateLogo()
+	{
+		$id = $this->input->post('id');
+        $posisi = $this->input->post('posisi');
+
+        if ($posisi == 'kiri'){
+            $logo = base64_encode(file_get_contents($_FILES['file']['tmp_name']));
+            $data = array(
+                'logokiri' => $logo
+            );
+        } else {
+            $logo = base64_encode(file_get_contents($_FILES['file']['tmp_name']));
+            $data = array(
+                'logokanan' => $logo
+            );
+        }
+		
+
+		$data = $this->PesertaModel->updateData('kop', $data, 'id =' . $id);
+		echo json_encode($data);
+	}
+
+    public function updateKop()
+    {
+        $kop = $this->input->post('kop');
+
+        $data = array(
+            'kop' => $kop
+        );
+
+        $data = $this->KopModel->updateData('kop', $data, 'id = "1"');
+		echo json_encode($data);
     }
 }

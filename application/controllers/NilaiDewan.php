@@ -28,6 +28,20 @@ class NilaiDewan extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	 public function updateStatusPertandingan() {
+        $id = $this->input->post('id');
+        $this->load->model('NilaiDewanModel');
+        $result = $this->NilaiDewanModel->getDataPertandinganSelesai($id);
+
+	    if ($result) {
+	        // Jika pembaruan berhasil
+	        echo json_encode(['status' => 'success']);
+	    } else {
+	        // Jika pembaruan gagal
+	        echo json_encode(['status' => 'error']);
+	    }
+    }
+
 	public function tampilRonde(){
 		$partai_id = $this->input->post('partai_id');
 		$data = $this->NilaiDewanModel->getRonde($partai_id);
@@ -118,6 +132,17 @@ class NilaiDewan extends CI_Controller {
 		$this->NilaiDewanModel->simpanData('log', $dataLog);
 		$tambahNilai = $this->NilaiDewanModel->simpanData('penilaian', $data);
 		return $tambahNilai;
+	}
+
+	public function tambahRondecon(){
+		$ronde_id = $this->input->post('ronde_id');
+		$partai_id = $this->input->post('partai_id');
+		$data = array(
+			'ronde_id'	=> $ronde_id,
+			'partai_id'	=> $partai_id
+		);
+		$tambahRondecon = $this->NilaiDewanModel->simpanData('rondecon', $data);
+		return $tambahRondecon;
 	}
 
 	public function tambahVote(){

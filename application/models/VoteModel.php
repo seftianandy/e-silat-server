@@ -40,6 +40,16 @@ class VoteModel extends CI_Model {
         return $data->result();
     }
 
+    public function getDataRondeconJuri($juri){
+        $data = $this->db->query("SELECT *
+                                FROM rondecon
+                                WHERE ".$juri." IS NULL
+                                ORDER BY id DESC
+                                LIMIT 1;
+        ");
+        return $data->result();
+    }
+
     public function getDataVoteSkor(){
         $data = $this->db->query("SELECT
                                         *,

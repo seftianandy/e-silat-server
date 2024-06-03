@@ -102,6 +102,33 @@ class NilaiJuri extends CI_Controller {
 		$this->NilaiJuriModel->truncate('penilaian_temp');
 	}
 
+	public function tampilDataRondecon(){
+		$juri = $_SESSION['role'];
+		$data = $this->VoteModel->getDataRondeconJuri($juri);
+		echo json_encode($data);
+	}
+
+	public function updateDataRondecon(){
+		$id = $this->input->post('id');
+		$rondeId = $this->input->post('rondeId');
+		$val = $this->input->post('val');
+		$juri = $_SESSION['role'];
+
+		$data = array(
+			$juri	=> $val
+		);
+
+		$dataVote = $this->VoteModel->getDataRondeconJuri($juri);
+		$rowsVote = count($dataVote);
+
+		if($rowsVote > 0){
+			// $vote = $dataVote[0]; 
+			// $nilai_id = $vote->nilai_id;
+			$data = $this->VoteModel->updateDataVoteJuri('rondecon', $data, 'id = "'.$id.'"');
+			echo json_encode($data);
+		}
+	}
+
 	public function tampilDataVote(){
 		$juri = $_SESSION['role'];
 		$data = $this->VoteModel->getDataVoteJuri($juri);

@@ -1,10 +1,10 @@
 $(document).ready(function () {
 	getData();
 
-	let table = $('#data').DataTable({
-		responsive: true
-	});
-	new $.fn.dataTable.FixedHeader(table);
+	// let table = $('#data').DataTable({
+	// 	responsive: true
+	// });
+	// new $.fn.dataTable.FixedHeader(table);
 
 	$(document).on("click", "#penjurian", function () {
 		let id = $(this).attr("data-id");

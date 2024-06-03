@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 $route['default_controller'] = 'Auth';
 $route['404_override'] = 'Error404';
 $route['translate_uri_dashes'] = FALSE;
@@ -9,6 +9,9 @@ $route['sign'] = 'Auth/login';
 $route['logout'] = 'Auth/logout';
 
 $route['dashboard'] = 'Dashboard/index';
+$route['datakop'] = 'Dashboard/tampilData';
+$route['updatelogokop'] = 'Dashboard/updateLogo';
+$route['updatekop'] = 'Dashboard/updateKop';
 
 $route['akun'] = 'DaftarAkun/index';
 $route['dataakun'] = 'DaftarAkun/tampilData';
@@ -19,10 +22,12 @@ $route['datanilai'] = 'Nilai/tampilData';
 $route['peserta'] = 'Peserta/index';
 $route['datapeserta'] = 'Peserta/tampilData';
 $route['tambahpeserta'] = 'Peserta/tambahPeserta';
+$route['updatelogo'] = 'Peserta/updateLogo';
 $route['resetpeserta'] = 'Peserta/resetData';
 
 $route['pertandingan'] = 'Pertandingan/index';
 $route['datapertandingan'] = 'Pertandingan/tampilDataPertandingan';
+
 
 $route['nilaijuri'] = 'NilaiJuri/index';
 $route['penjurian'] = 'NilaiJuri/penjurian';
@@ -31,6 +36,8 @@ $route['datarondejuri'] = 'NilaiJuri/tampilRonde';
 $route['datanilaiatlitjuri'] = 'NilaiJuri/tampilNilaiAtlitJuri';
 
 $route['tambahnilai'] = 'NilaiJuri/tambahNilai';
+$route['datarondeconjuri'] = 'NilaiJuri/tampilDataRondecon';
+$route['updaterondeconjuri'] = 'NilaiJuri/updateDataRondecon';
 $route['datavotejuri'] = 'NilaiJuri/tampilDataVote';
 $route['updatevotejuri'] = 'NilaiJuri/updateDataVote';
 $route['hapusnilai'] = 'NilaiJuri/hapusNilai';
@@ -44,8 +51,10 @@ $route['datanilaiperingatandewan'] = 'NilaiDewan/tampilNilaiPeringatan';
 $route['datanilaijatuhandewan'] = 'NilaiDewan/tampilNilaiJatuhan';
 $route['datanilaitegurandewan'] = 'NilaiDewan/tampilNilaiTeguran';
 $route['datanilaihukumandewan'] = 'NilaiDewan/tampilNilaiHukuman';
+$route['selesaipertandingan'] = 'NilaiDewan/updateStatusPertandingan';
 
 $route['tambahnilaidewan'] = 'NilaiDewan/tambahNilai';
+$route['tambahrondecondewan'] = 'NilaiDewan/tambahRondecon';
 $route['tambahvotedewan'] = 'NilaiDewan/tambahVote';
 $route['datavotedewan'] = 'NilaiDewan/tampilDataVote';
 $route['hasilvotedewan'] = 'NilaiDewan/hasilVote';

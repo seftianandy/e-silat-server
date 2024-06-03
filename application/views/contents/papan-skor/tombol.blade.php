@@ -94,8 +94,8 @@
         millisecondsRemaining -= 1000; // ini waktu intervalnya jadi jamnya berubah setiap 1 detik
         updateTimerDisplay();
       } else {
-        const audio = new Audio('<?= base_url() ?>dist/sounds/timer-habis.mp3');
-        audio.play();
+        // const audio = new Audio('<?= base_url() ?>dist/sounds/timer-habis.mp3');
+        // audio.play();
         stopTimer();
       }
     }, 1000); // ini waktu intervalnya jadi jamnya berubah setiap 1 detik

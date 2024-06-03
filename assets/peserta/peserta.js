@@ -1,13 +1,15 @@
 $(document).ready(function () {
 	getData();
-
-	let table = $('#data').DataTable({
-		responsive: true
-	});
-	new $.fn.dataTable.FixedHeader(table);
+	$('#data').DataTable();
+	// new $.fn.dataTable.FixedHeader(table);
 
 	$("#tambahData").on("click", function () {
 		tambahData();
+	});
+
+	$(document).on("click", "#saveLogo", function () {
+		dataId = $(this).attr("data-id");
+		updateLogo(dataId);
 	});
 
 	$("#resetData").on("click", function () {
@@ -28,37 +30,49 @@ $(document).ready(function () {
 				for (i = 0; i < data.length; i++) {
 					html +=
 						"<tr>" +
-						"<td class='text-center' style='vertical-align: middle;'>" +
+						"<td class='text-center' style='font-weight: bold; font-size: 1.7rem;'>" +
 						num++ +
 						"</td>" +
 						"<td>" +
-						data[i].nama +
-						"</td>" +
-						"<td>" +
-						data[i].kontingen +
-						"</td>" +
-						"<td>" +
-						data[i].kelas +
-						"</td>" +
-						"<td>" +
-						data[i].kategori +
-						"</td>" +
-						"<td>" +
-						data[i].jk +
-						"</td>" +
-						"<td class='text-center' style='vertical-align: middle;'>" ;
-					if (data[i].tim == 'merah') {
-						html += 
-							"<span class='text-danger'>"+
-							data[i].tim +
-							"</span>";
-					} else {
-						html +=
-							"<span class='text-primary'>" +
-							data[i].tim +
-							"</span>";
-					}
+						"<span style='font-weight: bold;'>Nama : </span>" + data[i].nama + "<br>" +
+						"<span style='font-weight: bold;'>Kontingen : </span>" + data[i].kontingen + "<br>" +
+						"<span style='font-weight: bold;'>Kelas : </span>" + data[i].kelas + "<br>" +
+						"<span style='font-weight: bold;'>Kategori : </span>" + data[i].kategori + "<br>" +
+						"<span style='font-weight: bold;'>Jenis Kelamin : </span>" + data[i].jk + "<br>" +
+						"<span style='font-weight: bold;'>Kubu : </span> <br> <button class='btn btn-md btn-";
+						if (data[i].tim == 'merah') {
+							html +=
+								"danger";
+						} else {
+							html +=
+								"primary";
+						}
 					html +=
+						"'>";
+						if (data[i].tim == 'merah') {
+							html +=
+								"&nbsp &nbsp Merah &nbsp &nbsp";
+						} else {
+							html +=
+								"&nbsp &nbsp &nbsp Biru &nbsp &nbsp &nbsp";
+						}
+					html +=
+					// 	"</button><br>" +
+					// 	"<td>" +
+					// 	"<div class='input-group margin'>" +
+					// 	"<input type='file' name='logo' id='uploadLogo" + data[i].id +"' class='form-control'>" +
+					// 	"<span class='input-group-btn'>" +
+					// 	"<button type='button' class='btn btn-success btn-flat' id='saveLogo' data-id='" + data[i].id+"'> <i class='fa fa-save'></i> </button>" +
+					// 	"</span>" +
+					// 	"</div> <br> <br>";
+					// 	if (data[i].logo == null || data[i].logo == '') {
+					// 		html +=
+					// 			"<image src='dist/img/noimage.png' class='img-responsive'>";
+					// 	} else {
+					// 		html +=
+					// 			"<image src='data:image/jpeg;base64," + data[i].logo +"' class='img-responsive' style='max-height: 10rem;'>";
+					// 	}
+					// html +=
 						"</td>" +
 						"</tr>";
 				}
@@ -96,6 +110,48 @@ $(document).ready(function () {
 					position: "center",
 					icon: "error",
 					title: "Error: " + xhr.responseText,
+					showConfirmButton: false,
+					timer: 2000,
+				});
+			}
+		});
+	}
+
+	function updateLogo(dataId) {
+
+		var id = dataId;
+		// var pic = $('#uploadLogo' + dataId).prop('files')[0];
+		// console.log(dataId)
+		// console.log(value);
+		var formData = new FormData();
+		formData.append('file', $('#uploadLogo' + dataId)[0].files[0]);
+		formData.append('id', id);
+
+
+		$.ajax({
+			type: "POST",
+			url: "updatelogo",
+			data: formData,
+			contentType: false,
+			processData: false,
+			dataType: "json", 
+			success: function (response) {
+				// console.log(response);
+				getData();
+				Swal.fire({
+					position: "center",
+					icon: "success",
+					title: "Data berhasil ditambahkan !",// Ubah pesan sukses sesuai respons dari server
+					showConfirmButton: false,
+					timer: 2000,
+				});
+			},
+			error: function (xhr, status, error) {
+				getData();
+				Swal.fire({
+					position: "center",
+					icon: "error",
+					title: "Data gagal disimpan",
 					showConfirmButton: false,
 					timer: 2000,
 				});

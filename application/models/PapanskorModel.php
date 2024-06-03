@@ -15,6 +15,8 @@ class PapanskorModel extends CI_Model {
                                     atlit_biru.kontingen AS kontingen_biru,
                                     atlit_merah.kontingen AS kontingen_merah,
                                     atlit_merah.nama AS nama_atlit_merah,
+									atlit_merah.logo AS logo_merah,
+									atlit_biru.logo AS logo_biru,
                                     arena.arena,
                                     ronde.status_ronde 
                                 FROM
